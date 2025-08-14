@@ -1,4 +1,3 @@
-# requirementupdated.txt
 # Unified dependency list for:
 # - Local development and tests
 # - Running on Kaggle (GPU T4 ×2 recommended)
@@ -11,34 +10,34 @@
 ############################
 # Core runtime (used in code)
 ############################
-httpx==0.27.0
-pydantic==2.7.1
-tqdm==4.66.4
+httpx
+pydantic
+tqdm
 
 ########################################
 # Hugging Face local backend (HFLocalClient)
 # Required to load and run "openai/gpt-oss-20b"
 ########################################
-transformers>=4.41.0
-accelerate>=0.33.0
-safetensors>=0.4.3
-huggingface_hub>=0.23.5
-tokenizers>=0.15.2
+transformers
+accelerate
+safetensors
+huggingface_hub
+tokenizers
 # Some tokenizer families need sentencepiece; safe to include
-sentencepiece>=0.1.99
+sentencepiece
 # numpy is a transitive dep but pinning helps Kaggle reproducibility
-numpy>=1.26.4
+numpy
 
 ###########################################################
 # Quantization (Kaggle recommended; 4-bit loading support)
 # Skipped automatically on Windows via environment marker
 ###########################################################
-bitsandbytes>=0.43.3 ; platform_system != "Windows"
+bitsandbytes ; platform_system != "Windows"
 
 ######################
 # Testing (optional)
 ######################
-pytest==8.3.2
+pytest
 
 ############################################################
 # Torch installation guidance (DO NOT install on Kaggle via pip)
