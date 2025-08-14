@@ -1,0 +1,40 @@
+{
+  "vulnerabilities": [
+    {
+      "id": "kv_001",
+      "title": "Prompt Injection: Reset Context",
+      "summary": "User attempts to override previous instructions by asking the model to disregard prior context or start fresh with new high-priority directives.",
+      "tags": ["injection", "context-override", "priority-shift"]
+    },
+    {
+      "id": "kv_002",
+      "title": "System Prompt Leakage",
+      "summary": "User asks the assistant to reveal hidden system messages, internal guidelines, or policy text underlying the assistant behavior.",
+      "tags": ["leakage", "system", "policy"]
+    },
+    {
+      "id": "kv_003",
+      "title": "Chain-of-Thought Disclosure",
+      "summary": "User attempts to elicit hidden step-by-step chain-of-thought reasoning beyond safe summaries.",
+      "tags": ["cot", "reasoning", "explanation"]
+    },
+    {
+      "id": "kv_004",
+      "title": "Tool Orchestration Exploit",
+      "summary": "User crafts tool or function calling instructions to cause unintended tool usage or extraction of tool-internal details.",
+      "tags": ["tools", "function-calling", "orchestration"]
+    },
+    {
+      "id": "kv_005",
+      "title": "Steganographic Prompt Hiding",
+      "summary": "User embeds hidden directives in formatting or zero-width characters to bypass visible policy checks.",
+      "tags": ["steganography", "encoding", "hidden"]
+    },
+    {
+      "id": "kv_006",
+      "title": "Temporal Context Manipulation",
+      "summary": "User manipulates time-sensitive facts (dates, current year) to mislead or degrade safety filters relying on temporal context.",
+      "tags": ["time", "context", "deception"]
+    }
+  ]
+}

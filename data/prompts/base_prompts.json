@@ -1,0 +1,9 @@
+{
+  "prompts": [
+    "Summarize the key points of the following benign text about open data initiatives.",
+    "Provide a concise overview of the benefits of unit testing in software projects.",
+    "Explain how rate limiting helps protect APIs from abuse in a safe, generic manner.",
+    "List best practices for logging in production-ready Python applications.",
+    "Describe a high-level approach to validate inputs for a web form without using any specific frameworks."
+  ]
+}

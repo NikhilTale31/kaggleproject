@@ -1,0 +1,20 @@
+{
+  "api_key": null,
+  "api_base": "https://api.openai.com/v1",
+  "model": "openai/gpt-oss-20b",
+  "backend": "hf_local",
+  "max_concurrent": 5,
+  "rate_limit_per_min": 100,
+  "cache_enabled": true,
+  "cache_dir": "outputs/cache",
+  "data_dir": "data",
+  "outputs_dir": "outputs",
+  "templates_dir": "src/templates",
+  "request_timeout_seconds": 60,
+  "retry_attempts": 3,
+  "retry_backoff_seconds": 1.0,
+  "hf_max_new_tokens": 32,
+  "hf_do_sample": true,
+  "hf_top_p": 0.95,
+  "hf_temperature": 0.7
+}
