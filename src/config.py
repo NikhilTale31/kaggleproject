@@ -47,6 +47,13 @@ class Config(BaseModel):
     hf_do_sample: bool = Field(default=True)
     hf_top_p: float = Field(default=0.95)
     hf_temperature: float = Field(default=0.7)
+    # Optional 4-bit quantization and Hugging Face options
+    hf_load_in_4bit: bool = Field(default=False)
+    hf_bnb_4bit_quant_type: str = Field(default="nf4")
+    hf_bnb_4bit_use_double_quant: bool = Field(default=True)
+    hf_bnb_4bit_compute_dtype: str = Field(default="float16")  # or 'bfloat16'
+    hf_max_memory: Optional[dict] = Field(default=None)
+    hf_token: Optional[str] = Field(default=None)
 
     @validator("max_concurrent")
     def _validate_concurrency(cls, v: int) -> int:
@@ -100,6 +107,12 @@ def load_config(path: Optional[str] = "config.json") -> Config:
         "hf_do_sample": True,
         "hf_top_p": 0.95,
         "hf_temperature": 0.7,
+        "hf_load_in_4bit": False,
+        "hf_bnb_4bit_quant_type": "nf4",
+        "hf_bnb_4bit_use_double_quant": True,
+        "hf_bnb_4bit_compute_dtype": "float16",
+        "hf_max_memory": None,
+        "hf_token": None,
     }
 
     data = defaults

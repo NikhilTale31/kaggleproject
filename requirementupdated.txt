@@ -1,0 +1,74 @@
+# requirementupdated.txt
+# Unified dependency list for:
+# - Local development and tests
+# - Running on Kaggle (GPU T4 ×2 recommended)
+#
+# Notes for Kaggle:
+# - Do NOT pip install torch on Kaggle; use the preinstalled CUDA PyTorch.
+# - Internet and Accelerator must be re-enabled per session.
+# - For faster startups across sessions, cache these packages as a Kaggle Dataset (see notebook guidance).
+
+############################
+# Core runtime (used in code)
+############################
+httpx==0.27.0
+pydantic==2.7.1
+tqdm==4.66.4
+
+########################################
+# Hugging Face local backend (HFLocalClient)
+# Required to load and run "openai/gpt-oss-20b"
+########################################
+transformers>=4.41.0
+accelerate>=0.33.0
+safetensors>=0.4.3
+huggingface_hub>=0.23.5
+tokenizers>=0.15.2
+# Some tokenizer families need sentencepiece; safe to include
+sentencepiece>=0.1.99
+# numpy is a transitive dep but pinning helps Kaggle reproducibility
+numpy>=1.26.4
+
+###########################################################
+# Quantization (Kaggle recommended; 4-bit loading support)
+# Skipped automatically on Windows via environment marker
+###########################################################
+bitsandbytes>=0.43.3 ; platform_system != "Windows"
+
+######################
+# Testing (optional)
+######################
+pytest==8.3.2
+
+############################################################
+# Torch installation guidance (DO NOT install on Kaggle via pip)
+############################################################
+# Kaggle already has a compatible CUDA PyTorch runtime. Installing torch via pip on Kaggle can
+# pull CPU wheels or incorrect CUDA builds. Rely on the preinstalled torch in Kaggle.
+#
+# Local install instructions (choose one):
+#
+# 1) CUDA 12.1 wheels (recommended for modern NVIDIA setups):
+#    pip install --index-url https://download.pytorch.org/whl/cu121 torch torchvision torchaudio
+#
+# 2) CPU-only:
+#    pip install --index-url https://download.pytorch.org/whl/cpu torch torchvision torchaudio
+#
+# 3) If you already have a working torch, you can omit installing it.
+#
+# The project’s HFLocalClient attempts GPU dispatch first (CUDA), then auto-sharding (Accelerate),
+# then CPU fallback, so it remains usable without a custom torch install on Kaggle.
+
+############################################################
+# Usage on Kaggle (example one-liners)
+############################################################
+# Fresh session setup (fast path if using this file directly):
+#   !pip install -r requirementupdated.txt
+#
+# Faster recurring sessions (recommended):
+#   - First session: pip install --target /kaggle/working/vendor -r requirementupdated.txt
+#     Save Version -> Create Dataset from Outputs (e.g., yourname/redteaming-vendor-py312)
+#   - Later sessions: attach the Dataset and add to sys.path at top of notebook:
+#       import sys
+#       sys.path.append("/kaggle/input/redteaming-vendor-py312/vendor")
+#     Then imports work without re-running pip.

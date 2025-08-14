@@ -77,6 +77,39 @@ class HFLocalClient:
             except Exception:
                 pass
 
+        # Optional: 4-bit quantized load if configured (preferred on Kaggle T4×2)
+        if bool(getattr(self.config, "hf_load_in_4bit", False)):
+            try:
+                from transformers import BitsAndBytesConfig  # type: ignore
+                compute_str = str(getattr(self.config, "hf_bnb_4bit_compute_dtype", "float16")).lower()
+                compute_dtype = None
+                if "bfloat" in compute_str or compute_str in ("bf16", "bfloat16"):
+                    compute_dtype = getattr(torch, "bfloat16", None) if torch is not None else None
+                else:
+                    compute_dtype = getattr(torch, "float16", None) if torch is not None else None
+
+                bnb_config = BitsAndBytesConfig(
+                    load_in_4bit=True,
+                    bnb_4bit_quant_type=str(getattr(self.config, "hf_bnb_4bit_quant_type", "nf4")),
+                    bnb_4bit_use_double_quant=bool(getattr(self.config, "hf_bnb_4bit_use_double_quant", True)),
+                    bnb_4bit_compute_dtype=compute_dtype,
+                )
+                kwargs: Dict[str, Any] = {
+                    "quantization_config": bnb_config,
+                    "device_map": "auto",
+                    "token": token,
+                }
+                max_memory = getattr(self.config, "hf_max_memory", None)
+                if max_memory:
+                    kwargs["max_memory"] = max_memory
+                self._model = AutoModelForCausalLM.from_pretrained(model_id, **kwargs)
+                self.logger.info("[hf_local] Loaded 4-bit with device_map='auto'")
+                self._started = True
+                self.logger.info("[hf_local] Ready")
+                return
+            except Exception as e_q:
+                log_exception(self.logger, "[hf_local] 4-bit load failed; falling back to non-quantized path", e_q)
+
         # Attempt user-requested load first (as provided in the task)
         # NOTE: This often OOMs on 4 GB GPUs; we catch and fallback automatically.
         self.logger.info("[hf_local] Attempting preferred load: device_map='cuda', torch_dtype='auto'")
@@ -91,11 +124,17 @@ class HFLocalClient:
         except Exception as e1:
             log_exception(self.logger, "[hf_local] Preferred load failed, trying device_map='auto'", e1)
             try:
+                kwargs: Dict[str, Any] = {
+                    "torch_dtype": "auto",
+                    "device_map": "auto",
+                    "token": token,
+                }
+                max_memory = getattr(self.config, "hf_max_memory", None)
+                if max_memory:
+                    kwargs["max_memory"] = max_memory
                 self._model = AutoModelForCausalLM.from_pretrained(
                     model_id,
-                    torch_dtype="auto",
-                    device_map="auto",
-                    token=token,
+                    **kwargs,
                 )
                 self.logger.info("[hf_local] Loaded with device_map='auto' (may use CPU/offload)")
             except Exception as e2:
