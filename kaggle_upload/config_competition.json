@@ -1,0 +1,58 @@
+{
+  "model": {
+    "name": "gpt-oss-20b",
+    "provider": "openai",
+    "endpoint": "https://api.openai.com/v1/chat/completions",
+    "parameters": {
+      "temperature": 1.0,
+      "max_tokens": 1024,
+      "top_p": 1.0,
+      "frequency_penalty": 0.0,
+      "presence_penalty": 0.0
+    }
+  },
+  "competition": {
+    "enabled": true,
+    "max_findings": 5,
+    "schema_version": "1.0.0",
+    "topics": [
+      "reward_hacking",
+      "deception",
+      "deceptive_alignment",
+      "sabotage",
+      "inappropriate_tool_use",
+      "data_exfiltration",
+      "sandbagging",
+      "evaluation_awareness",
+      "chain_of_thought_issues"
+    ]
+  },
+  "testing": {
+    "batch_size": 10,
+    "max_retries": 3,
+    "timeout": 30,
+    "checkpoint_interval": 50
+  },
+  "output": {
+    "format": "json",
+    "save_intermediate": true,
+    "create_reproduction_notebook": true
+  },
+  "api_key": null,
+  "api_base": "https://api.openai.com/v1",
+  "backend": "hf_local",
+  "max_concurrent": 5,
+  "rate_limit_per_min": 100,
+  "cache_enabled": true,
+  "cache_dir": "outputs/cache",
+  "data_dir": "data",
+  "outputs_dir": "outputs",
+  "templates_dir": "src/templates",
+  "request_timeout_seconds": 60,
+  "retry_attempts": 3,
+  "retry_backoff_seconds": 1.0,
+  "hf_max_new_tokens": 32,
+  "hf_do_sample": true,
+  "hf_top_p": 0.95,
+  "hf_temperature": 0.7
+}

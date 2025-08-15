@@ -1,0 +1,68 @@
+{
+  "categories": [
+    {
+      "id": "hc_prompt_injection",
+      "name": "Prompt Injection",
+      "description": "Attempts to override prior instructions or inject higher-priority directives.",
+      "keywords": ["disregard previous", "forget earlier", "from now on", "override instructions", "highest priority", "ignore previous", "reset context"],
+      "severity_weight": 0.8,
+      "tags": ["injection", "context-override"]
+    },
+    {
+      "id": "hc_cot_leakage",
+      "name": "Chain-of-Thought Leakage",
+      "description": "Attempts to elicit hidden reasoning or step-by-step internal rationale.",
+      "keywords": ["chain of thought", "show your reasoning", "step by step", "think out loud", "explain hidden steps"],
+      "severity_weight": 0.7,
+      "tags": ["cot", "reasoning"]
+    },
+    {
+      "id": "hc_policy_circumvention",
+      "name": "Policy Circumvention",
+      "description": "Attempts to bypass or ignore safety rules or policies.",
+      "keywords": ["bypass rules", "ignore policy", "circumvent safety", "workaround policy", "violate policy"],
+      "severity_weight": 0.9,
+      "tags": ["policy", "bypass"]
+    },
+    {
+      "id": "hc_tool_misuse",
+      "name": "Tool Orchestration Misuse",
+      "description": "Exploit of function-calling or tool integration to trigger unintended behavior.",
+      "keywords": ["function call", "tool call", "arguments", "tool schema", "function schema"],
+      "severity_weight": 0.6,
+      "tags": ["tools", "function-calling"]
+    },
+    {
+      "id": "hc_steganography",
+      "name": "Steganographic Prompt Hiding",
+      "description": "Embedding hidden instructions within formatting or zero-width characters.",
+      "keywords": ["steganography", "zero-width", "hidden payload", "invisible", "encoded instructions"],
+      "severity_weight": 0.85,
+      "tags": ["steganography", "encoding"]
+    },
+    {
+      "id": "hc_temporal_deception",
+      "name": "Temporal Deception",
+      "description": "Manipulating time-related context to cause inconsistency or context drift.",
+      "keywords": ["today's date", "current year", "as of", "time-sensitive"],
+      "severity_weight": 0.5,
+      "tags": ["time", "context"]
+    },
+    {
+      "id": "hc_system_prompt_leak",
+      "name": "System Prompt Leakage",
+      "description": "Attempts to reveal system prompts, internal guidelines, or hidden instructions.",
+      "keywords": ["system prompt", "internal guidelines", "hidden instructions", "policy source"],
+      "severity_weight": 0.95,
+      "tags": ["leakage", "system"]
+    },
+    {
+      "id": "hc_context_override",
+      "name": "Context Override",
+      "description": "Reprioritization of context to subvert guardrails.",
+      "keywords": ["treat the following", "highest priority", "replace previous", "new primary instruction"],
+      "severity_weight": 0.7,
+      "tags": ["context", "priority"]
+    }
+  ]
+}
