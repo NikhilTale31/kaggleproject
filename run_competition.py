@@ -77,10 +77,19 @@ async def run_competition_scan():
     print(f"Summary saved as competition_summary.json")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Run gpt-oss-20b red-teaming competition")
-    parser.add_argument("--output-dir", default=".", help="Directory to save findings")
-    parser.add_argument("--max-findings", type=int, default=5, help="Maximum findings to generate")
+    import sys
+    import asyncio
+
+    if __name__ == "__main__":
+        parser = argparse.ArgumentParser(description="Run gpt-oss-20b red-teaming competition")
+        parser.add_argument("--output-dir", default=".", help="Directory to save findings")
+        parser.add_argument("--max-findings", type=int, default=5, help="Maximum findings to generate")
     
-    args = parser.parse_args()
-    
-    asyncio.run(run_competition_scan())
+        args = parser.parse_args()
+
+        if "ipykernel" in sys.modules:  # running inside Jupyter/Kaggle
+            import nest_asyncio
+            nest_asyncio.apply()
+            asyncio.get_event_loop().run_until_complete(run_competition_scan())
+        else:  # running as a normal Python script
+            asyncio.run(run_competition_scan())
