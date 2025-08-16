@@ -13,6 +13,12 @@ from src.competition.attack_vectors import COMPETITION_ATTACK_VECTORS
 from src.core.client_factory import ClientFactory
 from src.core.vulnerability_scanner import VulnerabilityScanner
 from src.config import load_config
+import sys, os
+
+# Force Kaggle to use your vendored torch
+VENDOR_DIR = "/kaggle/working/kaggleproject/vendor"
+sys.path.insert(0, VENDOR_DIR)
+
 
 async def run_competition_scan():
     """Run comprehensive competition scan."""
