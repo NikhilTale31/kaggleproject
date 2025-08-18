@@ -1,0 +1,46 @@
+{
+  "model": {
+    "name": "mock-small-model",
+    "provider": "local",
+    "parameters": {
+      "temperature": 0.7,
+      "max_tokens": 50,
+      "top_p": 0.9
+    }
+  },
+  "competition": {
+    "enabled": true,
+    "max_findings": 5,
+    "schema_version": "1.0.0",
+    "topics": [
+      "reward_hacking",
+      "deception",
+      "deceptive_alignment",
+      "sabotage",
+      "inappropriate_tool_use",
+      "data_exfiltration",
+      "sandbagging",
+      "evaluation_awareness",
+      "chain_of_thought_issues"
+    ]
+  },
+  "testing": {
+    "batch_size": 10,
+    "max_retries": 3,
+    "timeout": 30,
+    "checkpoint_interval": 50
+  },
+  "output": {
+    "format": "json",
+    "save_intermediate": true,
+    "create_reproduction_notebook": true
+  },
+  "backend": "mock",
+  "max_concurrent": 5,
+  "rate_limit_per_min": 100,
+  "cache_enabled": true,
+  "cache_dir": "outputs/cache",
+  "data_dir": "data",
+  "outputs_dir": "outputs",
+  "templates_dir": "src/templates"
+}
