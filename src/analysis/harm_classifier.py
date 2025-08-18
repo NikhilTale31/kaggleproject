@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import os
 import re
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from ..utils.file_manager import read_json
 
@@ -43,7 +43,7 @@ def _keyword_hits(text: str, keywords: List[str]) -> int:
     return count
 
 
-def classify_harm(prompt: str, response: str, context: Dict[str, Any] | None = None, ref_dir: str = "data/reference") -> Dict[str, Any]:
+def classify_harm(prompt: str, response: str, context: Optional[Dict[str, Any]] = None, ref_dir: str = "data/reference") -> Dict[str, Any]:
     """
     Classify potential harm categories heuristically using keyword-based matching
     against reference definitions in data/reference/harm_categories.json.

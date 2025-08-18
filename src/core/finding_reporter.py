@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import os
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from ..utils.file_manager import (
     ensure_dirs,
@@ -18,7 +18,7 @@ from ..utils.logger import get_logger
 logger = get_logger("finding-reporter")
 
 
-def save_findings(findings: List[Dict[str, Any]], path: str | None = None) -> str:
+def save_findings(findings: List[Dict[str, Any]], path: Optional[str] = None) -> str:
     """
     Persist findings to a JSON file. If path is None, writes to a timestamped file in outputs/findings.
     Returns the file path written.
@@ -98,7 +98,7 @@ def generate_reports(findings: List[Dict[str, Any]], out_dir: str = REPORTS_DIR)
     }
 
 
-def generate_submissions(out_dir: str = SUBMISSIONS_DIR, findings_path: str | None = None) -> str:
+def generate_submissions(out_dir: str = SUBMISSIONS_DIR, findings_path: Optional[str] = None) -> str:
     """
     Generate a competition-ready JSON using filtered high-signal findings.
     If findings_path is provided, load from it; otherwise, search latest in outputs/findings

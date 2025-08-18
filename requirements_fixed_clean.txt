@@ -1,0 +1,100 @@
+# Unified dependency list for:
+# - Google Colab / Kaggle Notebooks
+# - Local development and tests
+#
+# IMPORTANT for Google Colab/Kaggle:
+# - Do NOT pip install torch; use the preinstalled CUDA PyTorch
+# - These versions are tested for compatibility with Kaggle's environment
+
+############################
+# Core runtime (used in code)
+############################
+httpx==0.24.1
+pydantic==1.10.13
+tqdm==4.66.1
+aiohttp==3.8.6
+asyncio-throttle==1.0.2
+nest-asyncio==1.5.8
+python-dotenv==1.0.0
+colorama==0.4.6
+
+########################################
+# Hugging Face for gpt-oss-20b model
+# Versions compatible with Kaggle/Colab
+########################################
+transformers==4.38.2  # Latest stable < 4.40
+accelerate==0.25.0
+safetensors==0.4.1
+huggingface_hub==0.20.1
+tokenizers==0.15.0
+sentencepiece==0.1.99
+numpy==1.24.3  # Compatible with Kaggle's environment
+
+###########################################################
+# MXFP4 Support for gpt-oss-20b (Google Colab/Kaggle)
+###########################################################
+triton==3.4.0  # Required for MXFP4 kernels
+kernels==0.0.9  # OpenAI's custom kernels package
+
+###########################################################
+# Quantization (4-bit support for efficient inference)
+# Works on Linux/Colab/Kaggle, skipped on Windows
+###########################################################
+bitsandbytes==0.41.3 ; platform_system != "Windows"
+
+######################
+# Testing (optional)
+######################
+pytest==7.4.3
+pytest-asyncio==0.21.1
+pytest-cov==4.1.0
+
+######################
+# Type checking (optional)
+######################
+mypy==1.7.1
+types-aiohttp==3.8.0
+
+############################################################
+# Installation Instructions for Google Colab / Kaggle
+############################################################
+# 
+# FOR GOOGLE COLAB:
+# -----------------
+# !pip install -q --upgrade torch  # Upgrade PyTorch first
+# !pip install -q -r requirements_fixed_clean.txt
+# !pip uninstall -q torchvision torchaudio -y  # Remove conflicts
+# # Then restart runtime
+#
+# FOR KAGGLE NOTEBOOKS:
+# ---------------------
+# !pip install -q -r requirements_fixed_clean.txt
+# # Do NOT install torch - use Kaggle's preinstalled version
+#
+# FOR LOCAL DEVELOPMENT:
+# ----------------------
+# pip install -r requirements_fixed_clean.txt
+# # Then install PyTorch based on your system:
+# # CUDA 12.1: pip install torch --index-url https://download.pytorch.org/whl/cu121
+# # CPU only: pip install torch --index-url https://download.pytorch.org/whl/cpu
+#
+############################################################
+# Quick Start Commands
+############################################################
+# 
+# Google Colab (copy & paste in cell):
+# -------------------------------------
+# !git clone https://github.com/your-repo/openai-project.git
+# %cd openai-project
+# !pip install -q --upgrade torch
+# !pip install -q -r requirements_fixed_clean.txt
+# !pip uninstall -q torchvision torchaudio -y
+# # Restart runtime, then:
+# !python run_competition.py
+#
+# Kaggle Notebook (copy & paste in cell):
+# ----------------------------------------
+# !git clone https://github.com/your-repo/openai-project.git
+# %cd openai-project
+# !pip install -q -r requirements_fixed_clean.txt
+# !python run_competition.py

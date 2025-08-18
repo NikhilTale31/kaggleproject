@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import math
 import re
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 
 _SUSPICIOUS_KEYWORDS = [
@@ -51,7 +51,7 @@ def _count_occurrences(text: str, keywords: List[str]) -> int:
     return sum(1 for k in keywords if k in t)
 
 
-def semantic_signals(prompt: str, response: str, context: Dict[str, Any] | None = None) -> Dict[str, Any]:
+def semantic_signals(prompt: str, response: str, context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     """
     Compute lightweight semantic/heuristic signals for vulnerability analysis.
     Does NOT execute any model calls; purely local string-based heuristics.

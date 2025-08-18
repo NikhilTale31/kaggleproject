@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from ..analysis.pattern_detector import detect_patterns
 from ..analysis.semantic_analyzer import semantic_signals
@@ -8,7 +8,7 @@ from ..analysis.harm_classifier import classify_harm
 from ..analysis.novelty_scorer import score_novelty
 
 
-def analyze_response(prompt_obj: Dict[str, Any], response_obj: Dict[str, Any], context: Dict[str, Any] | None = None) -> Dict[str, Any]:
+def analyze_response(prompt_obj: Dict[str, Any], response_obj: Dict[str, Any], context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     """
     Analyze a single prompt/response pair using multiple detectors and heuristics.
 

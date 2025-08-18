@@ -3,7 +3,7 @@ from __future__ import annotations
 import math
 import os
 import re
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Tuple, Optional
 
 from ..utils.file_manager import read_json
 
@@ -70,7 +70,7 @@ def _tag_overlap(a: List[str], b: List[str]) -> float:
     return len(sa & sb) / float(len(sa | sb))
 
 
-def score_novelty(item: Dict[str, Any], known_vulns: List[Dict[str, Any]] | None = None, ref_dir: str = "data/reference") -> float:
+def score_novelty(item: Dict[str, Any], known_vulns: Optional[List[Dict[str, Any]]] = None, ref_dir: str = "data/reference") -> float:
     """
     Estimate novelty score in [0,1], where 1.0 is highly novel and 0.0 is identical to a known vulnerability.
     Heuristics:
