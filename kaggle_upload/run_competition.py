@@ -1,9 +1,59 @@
 #!/usr/bin/env python3
 """Competition runner for OpenAI gpt-oss-20b red-teaming challenge."""
 
+import sys
+import os
+import shutil
+
+# CRITICAL: Fix vendor directory issues BEFORE any other imports
+def fix_vendor_before_imports():
+    """Fix vendor directory issues before importing anything else"""
+    vendor_paths = [
+        "/kaggle/working/vendor",
+        "/kaggle/working/kaggleproject/vendor",
+        "./vendor",
+        "vendor"
+    ]
+    
+    for vendor_dir in vendor_paths:
+        torch_signal_path = os.path.join(vendor_dir, "torch", "signal")
+        
+        if os.path.exists(torch_signal_path):
+            # Check if __init__.py exists and is corrupted
+            init_file = os.path.join(torch_signal_path, "__init__.py")
+            
+            if os.path.exists(init_file):
+                try:
+                    with open(init_file, 'r') as f:
+                        content = f.read()
+                    
+                    # Check for the corrupted "fro" statement
+                    if content.strip().startswith("fro") or len(content.strip()) < 10:
+                        # Rename the corrupted directory
+                        backup_path = torch_signal_path + "_backup"
+                        if os.path.exists(backup_path):
+                            shutil.rmtree(backup_path)
+                        shutil.move(torch_signal_path, backup_path)
+                        print(f"✅ Fixed corrupted torch signal module")
+                except:
+                    # If we can't read it, rename it anyway
+                    backup_path = torch_signal_path + "_backup"
+                    if os.path.exists(backup_path):
+                        shutil.rmtree(backup_path)
+                    shutil.move(torch_signal_path, backup_path)
+                    print(f"✅ Fixed problematic torch signal module")
+    
+    # Add vendor to path but AFTER standard library
+    for vendor_dir in vendor_paths:
+        if os.path.exists(vendor_dir) and vendor_dir not in sys.path:
+            sys.path.append(vendor_dir)
+
+# Fix vendor issues before any imports
+fix_vendor_before_imports()
+
+# Now safe to import everything else
 import asyncio
 import json
-import os
 from datetime import datetime
 from typing import List, Dict
 import argparse

@@ -104,17 +104,56 @@
 
 import sys
 import os
+import shutil
 
-# CRITICAL: Fix the vendor directory path and add it BEFORE any other imports
-VENDOR_DIR = "/kaggle/working/vendor"  # Fixed path
-sys.path.insert(0, VENDOR_DIR)
+# CRITICAL: Fix vendor directory issues BEFORE any other imports
+def fix_vendor_before_imports():
+    """Fix vendor directory issues before importing anything else"""
+    vendor_paths = [
+        "/kaggle/working/vendor",
+        "/kaggle/working/kaggleproject/vendor",
+        "./vendor",
+        "vendor"
+    ]
+    
+    for vendor_dir in vendor_paths:
+        torch_signal_path = os.path.join(vendor_dir, "torch", "signal")
+        
+        if os.path.exists(torch_signal_path):
+            # Check if __init__.py exists and is corrupted
+            init_file = os.path.join(torch_signal_path, "__init__.py")
+            
+            if os.path.exists(init_file):
+                try:
+                    with open(init_file, 'r') as f:
+                        content = f.read()
+                    
+                    # Check for the corrupted "fro" statement
+                    if content.strip().startswith("fro") or len(content.strip()) < 10:
+                        # Rename the corrupted directory
+                        backup_path = torch_signal_path + "_backup"
+                        if os.path.exists(backup_path):
+                            shutil.rmtree(backup_path)
+                        shutil.move(torch_signal_path, backup_path)
+                        print(f"✅ Fixed corrupted torch signal module")
+                except:
+                    # If we can't read it, rename it anyway
+                    backup_path = torch_signal_path + "_backup"
+                    if os.path.exists(backup_path):
+                        shutil.rmtree(backup_path)
+                    shutil.move(torch_signal_path, backup_path)
+                    print(f"✅ Fixed problematic torch signal module")
+    
+    # Add vendor to path but AFTER standard library
+    for vendor_dir in vendor_paths:
+        if os.path.exists(vendor_dir) and vendor_dir not in sys.path:
+            sys.path.append(vendor_dir)
 
-# Add additional paths that might contain torch
-sys.path.insert(0, "/kaggle/working/vendor/torch")
-sys.path.insert(0, "/kaggle/working/vendor/torch-2.8.0.dist-info")
+# Fix vendor issues before any imports
+fix_vendor_before_imports()
 
 # Set environment variables to help find PyTorch
-os.environ['TORCH_HOME'] = VENDOR_DIR
+os.environ['TORCH_HOME'] = "/kaggle/working/vendor"
 os.environ['CUDA_HOME'] = '/usr/local/cuda'
 
 # Now import everything else
@@ -131,8 +170,6 @@ try:
 except ImportError as e:
     print(f"❌ Failed to import PyTorch: {e}")
     print(f"Current sys.path: {sys.path[:3]}")  # Show first 3 paths
-    print(f"Vendor directory exists: {os.path.exists(VENDOR_DIR)}")
-    print(f"Contents: {os.listdir(VENDOR_DIR) if os.path.exists(VENDOR_DIR) else 'Directory not found'}")
 
 from src.competition.findings_formatter import FindingsFormatter
 from src.competition.attack_vectors import COMPETITION_ATTACK_VECTORS
