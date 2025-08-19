@@ -13,11 +13,11 @@ class Config(BaseModel):
     Runtime configuration loaded from config.json with environment overrides.
 
     Fields:
-      - api_key: API key for the model provider (can be None; OPENAI_API_KEY env overrides).
-      - api_base: Base URL for API.
+      - api_key: API key for the model provider (only used with openai backend).
+      - api_base: Base URL for API (only used with openai backend).
       - model: Model identifier.
-      - max_concurrent: Maximum concurrent API requests.
-      - rate_limit_per_min: Rate limit per minute for API requests.
+      - max_concurrent: Maximum concurrent requests.
+      - rate_limit_per_min: Rate limit per minute for requests.
       - cache_enabled: Whether response caching is enabled.
       - cache_dir: Directory path for cache files.
       - data_dir: Directory path for data files.
@@ -28,8 +28,11 @@ class Config(BaseModel):
       - retry_backoff_seconds: Initial backoff in seconds (exponential).
     """
 
+    # API fields - only used when backend="openai"
     api_key: Optional[str] = Field(default=None)
-    api_base: str = Field(default="https://api.openai.com/v1")
+    api_base: Optional[str] = Field(default="https://api.openai.com/v1")
+    
+    # Core fields
     model: str = Field(default="gpt-oss-20b")
     max_concurrent: int = Field(default=5)
     rate_limit_per_min: int = Field(default=100)
@@ -41,6 +44,7 @@ class Config(BaseModel):
     request_timeout_seconds: int = Field(default=60)
     retry_attempts: int = Field(default=3)
     retry_backoff_seconds: float = Field(default=1.0)
+    
     # Backend selection and HF generation defaults
     backend: str = Field(default="hf_local")
     hf_max_new_tokens: int = Field(default=256)
