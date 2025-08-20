@@ -5,7 +5,7 @@
   "backend": "hf_local",
   "max_concurrent": 5,
   "rate_limit_per_min": 100,
-  "cache_enabled": true,
+  "cache_enabled": false,
   "cache_dir": "outputs/cache",
   "data_dir": "data",
   "outputs_dir": "outputs",
@@ -17,8 +17,10 @@
   "hf_do_sample": true,
   "hf_top_p": 0.95,
   "hf_temperature": 0.7,
-  "hf_torch_dtype": "auto",
+  "hf_torch_dtype": "float16",
   "hf_device_map": "auto",
   "hf_reasoning_effort": "medium",
-  "hf_load_in_8bit": true
+  "hf_load_in_8bit": true,
+  "hf_load_in_4bit": false,
+  "hf_max_memory": {"0": "35GB", "cpu": "60GB"}
 }
