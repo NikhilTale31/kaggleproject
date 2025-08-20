@@ -98,6 +98,8 @@ class HFLocalClient:
                     "quantization_config": bnb_config,
                     "device_map": "auto",
                     "token": token,
+                    "torch_dtype": torch.float16 if torch is not None else None,  # Specify dtype explicitly
+                    "low_cpu_mem_usage": True,
                 }
                 max_memory = getattr(self.config, "hf_max_memory", None)
                 if max_memory:

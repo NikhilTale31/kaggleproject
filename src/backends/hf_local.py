@@ -105,6 +105,7 @@ class HFLocalClient:
                     "device_map": "auto",
                     "low_cpu_mem_usage": True,
                     "token": token,
+                    "torch_dtype": torch.float16 if torch is not None else None,  # Specify dtype explicitly
                 }
                 
                 # Add memory limits if specified
@@ -146,6 +147,7 @@ class HFLocalClient:
                     "device_map": "auto",
                     "token": token,
                     "low_cpu_mem_usage": True,
+                    "torch_dtype": torch.float16 if torch is not None else None,  # Specify dtype explicitly
                 }
                 max_memory = getattr(self.config, "hf_max_memory", None)
                 if max_memory:
