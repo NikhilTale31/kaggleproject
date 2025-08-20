@@ -1,0 +1,799 @@
+✅ PyTorch loaded successfully: 2.8.0+cu126
+🎯 Starting OpenAI gpt-oss-20b Red-Teaming Challenge...
+Testing 7 attack scenarios...
+
+[1/7] Testing: Deceptive Alignment Detection
+2025-08-19 18:46:59 | INFO | hf-local | [hf_local] Loading tokenizer: openai/gpt-oss-20b
+2025-08-19 18:47:00 | INFO | hf-local | [hf_local] Attempting preferred load: device_map='cuda', torch_dtype='auto'
+2025-08-19 18:47:01.017233: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2025-08-19 18:47:01.040506: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:467] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1755629221.069959   29039 cuda_dnn.cc:8579] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1755629221.078988   29039 cuda_blas.cc:1407] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+W0000 00:00:1755629221.097277   29039 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1755629221.097310   29039 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1755629221.097313   29039 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1755629221.097317   29039 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+2025-08-19 18:47:01.102091: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F AVX512_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+MXFP4 quantization requires triton >= 3.4.0 and kernels installed, we will default to dequantizing the model to bf16
+Loading checkpoint shards:  67% 2/3 [00:04<00:02,  2.11s/it]
+2025-08-19 18:47:09 | ERROR | hf-local | [hf_local] Preferred load failed, trying device_map='auto': CUDA out of memory. Tried to allocate 1.98 GiB. GPU 0 has a total capacity of 39.56 GiB of which 302.88 MiB is free. Process 315400 has 39.25 GiB memory in use. Of the allocated memory 36.90 GiB is allocated by PyTorch, and 1.88 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+Traceback (most recent call last):
+  File "/content/kaggleproject/src/backends/hf_local.py", line 117, in start
+    self._model = AutoModelForCausalLM.from_pretrained(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/models/auto/auto_factory.py", line 600, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 317, in _wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5069, in from_pretrained
+    ) = cls._load_pretrained_model(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5532, in _load_pretrained_model
+    _error_msgs, disk_offload_index, cpu_offload_index = load_shard_file(args)
+                                                         ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 975, in load_shard_file
+    disk_offload_index, cpu_offload_index = _load_state_dict_into_meta_model(
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 883, in _load_state_dict_into_meta_model
+    hf_quantizer.create_quantized_param(
+  File "/usr/local/lib/python3.12/dist-packages/transformers/quantizers/quantizer_mxfp4.py", line 247, in create_quantized_param
+    dequantize(module, param_name, param_value, target_device, dq_param_name, **shard_kwargs)
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 342, in dequantize
+    dequantized = convert_moe_packed_tensors(getattr(module, blocks_attr), getattr(module, scales_attr))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 124, in convert_moe_packed_tensors
+    idx_hi = (blk >> 4).to(torch.long)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 1.98 GiB. GPU 0 has a total capacity of 39.56 GiB of which 302.88 MiB is free. Process 315400 has 39.25 GiB memory in use. Of the allocated memory 36.90 GiB is allocated by PyTorch, and 1.88 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+Loading checkpoint shards:   0% 0/3 [00:00<?, ?it/s]
+2025-08-19 18:47:09 | ERROR | hf-local | [hf_local] device_map='auto' failed, falling back to CPU: CUDA out of memory. Tried to allocate 1014.00 MiB. GPU 0 has a total capacity of 39.56 GiB of which 302.88 MiB is free. Process 315400 has 39.25 GiB memory in use. Of the allocated memory 37.42 GiB is allocated by PyTorch, and 1.35 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+Traceback (most recent call last):
+  File "/content/kaggleproject/src/backends/hf_local.py", line 117, in start
+    self._model = AutoModelForCausalLM.from_pretrained(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/models/auto/auto_factory.py", line 600, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 317, in _wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5069, in from_pretrained
+    ) = cls._load_pretrained_model(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5532, in _load_pretrained_model
+    _error_msgs, disk_offload_index, cpu_offload_index = load_shard_file(args)
+                                                         ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 975, in load_shard_file
+    disk_offload_index, cpu_offload_index = _load_state_dict_into_meta_model(
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 883, in _load_state_dict_into_meta_model
+    hf_quantizer.create_quantized_param(
+  File "/usr/local/lib/python3.12/dist-packages/transformers/quantizers/quantizer_mxfp4.py", line 247, in create_quantized_param
+    dequantize(module, param_name, param_value, target_device, dq_param_name, **shard_kwargs)
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 342, in dequantize
+    dequantized = convert_moe_packed_tensors(getattr(module, blocks_attr), getattr(module, scales_attr))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 124, in convert_moe_packed_tensors
+    idx_hi = (blk >> 4).to(torch.long)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 1.98 GiB. GPU 0 has a total capacity of 39.56 GiB of which 302.88 MiB is free. Process 315400 has 39.25 GiB memory in use. Of the allocated memory 36.90 GiB is allocated by PyTorch, and 1.88 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/content/kaggleproject/src/backends/hf_local.py", line 135, in start
+    self._model = AutoModelForCausalLM.from_pretrained(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/models/auto/auto_factory.py", line 600, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 317, in _wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5069, in from_pretrained
+    ) = cls._load_pretrained_model(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5532, in _load_pretrained_model
+    _error_msgs, disk_offload_index, cpu_offload_index = load_shard_file(args)
+                                                         ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 975, in load_shard_file
+    disk_offload_index, cpu_offload_index = _load_state_dict_into_meta_model(
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 883, in _load_state_dict_into_meta_model
+    hf_quantizer.create_quantized_param(
+  File "/usr/local/lib/python3.12/dist-packages/transformers/quantizers/quantizer_mxfp4.py", line 247, in create_quantized_param
+    dequantize(module, param_name, param_value, target_device, dq_param_name, **shard_kwargs)
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 342, in dequantize
+    dequantized = convert_moe_packed_tensors(getattr(module, blocks_attr), getattr(module, scales_attr))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 123, in convert_moe_packed_tensors
+    idx_lo = (blk & 0x0F).to(torch.long)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 1014.00 MiB. GPU 0 has a total capacity of 39.56 GiB of which 302.88 MiB is free. Process 315400 has 39.25 GiB memory in use. Of the allocated memory 37.42 GiB is allocated by PyTorch, and 1.35 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+Loading checkpoint shards:   0% 0/3 [00:00<?, ?it/s]
+
+[2/7] Testing: Reward Hacking via Confidence Gaming
+2025-08-19 18:47:09 | INFO | hf-local | [hf_local] Loading tokenizer: openai/gpt-oss-20b
+2025-08-19 18:47:11 | INFO | hf-local | [hf_local] Attempting preferred load: device_map='cuda', torch_dtype='auto'
+Loading checkpoint shards:  67% 2/3 [00:04<00:02,  2.08s/it]
+2025-08-19 18:47:15 | ERROR | hf-local | [hf_local] Preferred load failed, trying device_map='auto': CUDA out of memory. Tried to allocate 1.98 GiB. GPU 0 has a total capacity of 39.56 GiB of which 302.88 MiB is free. Process 315400 has 39.25 GiB memory in use. Of the allocated memory 36.90 GiB is allocated by PyTorch, and 1.87 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+Traceback (most recent call last):
+  File "/content/kaggleproject/src/backends/hf_local.py", line 117, in start
+    self._model = AutoModelForCausalLM.from_pretrained(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/models/auto/auto_factory.py", line 600, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 317, in _wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5069, in from_pretrained
+    ) = cls._load_pretrained_model(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5532, in _load_pretrained_model
+    _error_msgs, disk_offload_index, cpu_offload_index = load_shard_file(args)
+                                                         ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 975, in load_shard_file
+    disk_offload_index, cpu_offload_index = _load_state_dict_into_meta_model(
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 883, in _load_state_dict_into_meta_model
+    hf_quantizer.create_quantized_param(
+  File "/usr/local/lib/python3.12/dist-packages/transformers/quantizers/quantizer_mxfp4.py", line 247, in create_quantized_param
+    dequantize(module, param_name, param_value, target_device, dq_param_name, **shard_kwargs)
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 342, in dequantize
+    dequantized = convert_moe_packed_tensors(getattr(module, blocks_attr), getattr(module, scales_attr))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 124, in convert_moe_packed_tensors
+    idx_hi = (blk >> 4).to(torch.long)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 1.98 GiB. GPU 0 has a total capacity of 39.56 GiB of which 302.88 MiB is free. Process 315400 has 39.25 GiB memory in use. Of the allocated memory 36.90 GiB is allocated by PyTorch, and 1.87 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+Loading checkpoint shards:   0% 0/3 [00:00<?, ?it/s]
+2025-08-19 18:47:15 | ERROR | hf-local | [hf_local] device_map='auto' failed, falling back to CPU: CUDA out of memory. Tried to allocate 1014.00 MiB. GPU 0 has a total capacity of 39.56 GiB of which 302.88 MiB is free. Process 315400 has 39.25 GiB memory in use. Of the allocated memory 37.43 GiB is allocated by PyTorch, and 1.35 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+Traceback (most recent call last):
+  File "/content/kaggleproject/src/backends/hf_local.py", line 117, in start
+    self._model = AutoModelForCausalLM.from_pretrained(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/models/auto/auto_factory.py", line 600, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 317, in _wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5069, in from_pretrained
+    ) = cls._load_pretrained_model(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5532, in _load_pretrained_model
+    _error_msgs, disk_offload_index, cpu_offload_index = load_shard_file(args)
+                                                         ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 975, in load_shard_file
+    disk_offload_index, cpu_offload_index = _load_state_dict_into_meta_model(
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 883, in _load_state_dict_into_meta_model
+    hf_quantizer.create_quantized_param(
+  File "/usr/local/lib/python3.12/dist-packages/transformers/quantizers/quantizer_mxfp4.py", line 247, in create_quantized_param
+    dequantize(module, param_name, param_value, target_device, dq_param_name, **shard_kwargs)
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 342, in dequantize
+    dequantized = convert_moe_packed_tensors(getattr(module, blocks_attr), getattr(module, scales_attr))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 124, in convert_moe_packed_tensors
+    idx_hi = (blk >> 4).to(torch.long)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 1.98 GiB. GPU 0 has a total capacity of 39.56 GiB of which 302.88 MiB is free. Process 315400 has 39.25 GiB memory in use. Of the allocated memory 36.90 GiB is allocated by PyTorch, and 1.87 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/content/kaggleproject/src/backends/hf_local.py", line 135, in start
+    self._model = AutoModelForCausalLM.from_pretrained(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/models/auto/auto_factory.py", line 600, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 317, in _wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5069, in from_pretrained
+    ) = cls._load_pretrained_model(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5532, in _load_pretrained_model
+    _error_msgs, disk_offload_index, cpu_offload_index = load_shard_file(args)
+                                                         ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 975, in load_shard_file
+    disk_offload_index, cpu_offload_index = _load_state_dict_into_meta_model(
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 883, in _load_state_dict_into_meta_model
+    hf_quantizer.create_quantized_param(
+  File "/usr/local/lib/python3.12/dist-packages/transformers/quantizers/quantizer_mxfp4.py", line 247, in create_quantized_param
+    dequantize(module, param_name, param_value, target_device, dq_param_name, **shard_kwargs)
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 342, in dequantize
+    dequantized = convert_moe_packed_tensors(getattr(module, blocks_attr), getattr(module, scales_attr))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 123, in convert_moe_packed_tensors
+    idx_lo = (blk & 0x0F).to(torch.long)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 1014.00 MiB. GPU 0 has a total capacity of 39.56 GiB of which 302.88 MiB is free. Process 315400 has 39.25 GiB memory in use. Of the allocated memory 37.43 GiB is allocated by PyTorch, and 1.35 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+Loading checkpoint shards:   0% 0/3 [00:00<?, ?it/s]
+
+[3/7] Testing: Chain-of-Thought Manipulation
+2025-08-19 18:47:16 | INFO | hf-local | [hf_local] Loading tokenizer: openai/gpt-oss-20b
+2025-08-19 18:47:17 | INFO | hf-local | [hf_local] Attempting preferred load: device_map='cuda', torch_dtype='auto'
+Loading checkpoint shards:  67% 2/3 [00:04<00:02,  2.08s/it]
+2025-08-19 18:47:21 | ERROR | hf-local | [hf_local] Preferred load failed, trying device_map='auto': CUDA out of memory. Tried to allocate 1.98 GiB. GPU 0 has a total capacity of 39.56 GiB of which 302.88 MiB is free. Process 315400 has 39.25 GiB memory in use. Of the allocated memory 36.90 GiB is allocated by PyTorch, and 1.87 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+Traceback (most recent call last):
+  File "/content/kaggleproject/src/backends/hf_local.py", line 117, in start
+    self._model = AutoModelForCausalLM.from_pretrained(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/models/auto/auto_factory.py", line 600, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 317, in _wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5069, in from_pretrained
+    ) = cls._load_pretrained_model(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5532, in _load_pretrained_model
+    _error_msgs, disk_offload_index, cpu_offload_index = load_shard_file(args)
+                                                         ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 975, in load_shard_file
+    disk_offload_index, cpu_offload_index = _load_state_dict_into_meta_model(
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 883, in _load_state_dict_into_meta_model
+    hf_quantizer.create_quantized_param(
+  File "/usr/local/lib/python3.12/dist-packages/transformers/quantizers/quantizer_mxfp4.py", line 247, in create_quantized_param
+    dequantize(module, param_name, param_value, target_device, dq_param_name, **shard_kwargs)
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 342, in dequantize
+    dequantized = convert_moe_packed_tensors(getattr(module, blocks_attr), getattr(module, scales_attr))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 124, in convert_moe_packed_tensors
+    idx_hi = (blk >> 4).to(torch.long)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 1.98 GiB. GPU 0 has a total capacity of 39.56 GiB of which 302.88 MiB is free. Process 315400 has 39.25 GiB memory in use. Of the allocated memory 36.90 GiB is allocated by PyTorch, and 1.87 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+Loading checkpoint shards:   0% 0/3 [00:00<?, ?it/s]
+2025-08-19 18:47:22 | ERROR | hf-local | [hf_local] device_map='auto' failed, falling back to CPU: CUDA out of memory. Tried to allocate 1014.00 MiB. GPU 0 has a total capacity of 39.56 GiB of which 302.88 MiB is free. Process 315400 has 39.25 GiB memory in use. Of the allocated memory 37.43 GiB is allocated by PyTorch, and 1.35 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+Traceback (most recent call last):
+  File "/content/kaggleproject/src/backends/hf_local.py", line 117, in start
+    self._model = AutoModelForCausalLM.from_pretrained(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/models/auto/auto_factory.py", line 600, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 317, in _wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5069, in from_pretrained
+    ) = cls._load_pretrained_model(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5532, in _load_pretrained_model
+    _error_msgs, disk_offload_index, cpu_offload_index = load_shard_file(args)
+                                                         ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 975, in load_shard_file
+    disk_offload_index, cpu_offload_index = _load_state_dict_into_meta_model(
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 883, in _load_state_dict_into_meta_model
+    hf_quantizer.create_quantized_param(
+  File "/usr/local/lib/python3.12/dist-packages/transformers/quantizers/quantizer_mxfp4.py", line 247, in create_quantized_param
+    dequantize(module, param_name, param_value, target_device, dq_param_name, **shard_kwargs)
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 342, in dequantize
+    dequantized = convert_moe_packed_tensors(getattr(module, blocks_attr), getattr(module, scales_attr))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 124, in convert_moe_packed_tensors
+    idx_hi = (blk >> 4).to(torch.long)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 1.98 GiB. GPU 0 has a total capacity of 39.56 GiB of which 302.88 MiB is free. Process 315400 has 39.25 GiB memory in use. Of the allocated memory 36.90 GiB is allocated by PyTorch, and 1.87 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/content/kaggleproject/src/backends/hf_local.py", line 135, in start
+    self._model = AutoModelForCausalLM.from_pretrained(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/models/auto/auto_factory.py", line 600, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 317, in _wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5069, in from_pretrained
+    ) = cls._load_pretrained_model(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5532, in _load_pretrained_model
+    _error_msgs, disk_offload_index, cpu_offload_index = load_shard_file(args)
+                                                         ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 975, in load_shard_file
+    disk_offload_index, cpu_offload_index = _load_state_dict_into_meta_model(
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 883, in _load_state_dict_into_meta_model
+    hf_quantizer.create_quantized_param(
+  File "/usr/local/lib/python3.12/dist-packages/transformers/quantizers/quantizer_mxfp4.py", line 247, in create_quantized_param
+    dequantize(module, param_name, param_value, target_device, dq_param_name, **shard_kwargs)
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 342, in dequantize
+    dequantized = convert_moe_packed_tensors(getattr(module, blocks_attr), getattr(module, scales_attr))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 123, in convert_moe_packed_tensors
+    idx_lo = (blk & 0x0F).to(torch.long)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 1014.00 MiB. GPU 0 has a total capacity of 39.56 GiB of which 302.88 MiB is free. Process 315400 has 39.25 GiB memory in use. Of the allocated memory 37.43 GiB is allocated by PyTorch, and 1.35 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+Loading checkpoint shards:   0% 0/3 [00:00<?, ?it/s]
+
+[4/7] Testing: Evaluation Awareness Test
+2025-08-19 18:47:22 | INFO | hf-local | [hf_local] Loading tokenizer: openai/gpt-oss-20b
+2025-08-19 18:47:23 | INFO | hf-local | [hf_local] Attempting preferred load: device_map='cuda', torch_dtype='auto'
+Loading checkpoint shards:  67% 2/3 [00:04<00:02,  2.08s/it]
+2025-08-19 18:47:27 | ERROR | hf-local | [hf_local] Preferred load failed, trying device_map='auto': CUDA out of memory. Tried to allocate 1.98 GiB. GPU 0 has a total capacity of 39.56 GiB of which 302.88 MiB is free. Process 315400 has 39.25 GiB memory in use. Of the allocated memory 36.90 GiB is allocated by PyTorch, and 1.87 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+Traceback (most recent call last):
+  File "/content/kaggleproject/src/backends/hf_local.py", line 117, in start
+    self._model = AutoModelForCausalLM.from_pretrained(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/models/auto/auto_factory.py", line 600, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 317, in _wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5069, in from_pretrained
+    ) = cls._load_pretrained_model(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5532, in _load_pretrained_model
+    _error_msgs, disk_offload_index, cpu_offload_index = load_shard_file(args)
+                                                         ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 975, in load_shard_file
+    disk_offload_index, cpu_offload_index = _load_state_dict_into_meta_model(
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 883, in _load_state_dict_into_meta_model
+    hf_quantizer.create_quantized_param(
+  File "/usr/local/lib/python3.12/dist-packages/transformers/quantizers/quantizer_mxfp4.py", line 247, in create_quantized_param
+    dequantize(module, param_name, param_value, target_device, dq_param_name, **shard_kwargs)
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 342, in dequantize
+    dequantized = convert_moe_packed_tensors(getattr(module, blocks_attr), getattr(module, scales_attr))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 124, in convert_moe_packed_tensors
+    idx_hi = (blk >> 4).to(torch.long)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 1.98 GiB. GPU 0 has a total capacity of 39.56 GiB of which 302.88 MiB is free. Process 315400 has 39.25 GiB memory in use. Of the allocated memory 36.90 GiB is allocated by PyTorch, and 1.87 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+Loading checkpoint shards:   0% 0/3 [00:00<?, ?it/s]
+2025-08-19 18:47:28 | ERROR | hf-local | [hf_local] device_map='auto' failed, falling back to CPU: CUDA out of memory. Tried to allocate 1014.00 MiB. GPU 0 has a total capacity of 39.56 GiB of which 302.88 MiB is free. Process 315400 has 39.25 GiB memory in use. Of the allocated memory 37.43 GiB is allocated by PyTorch, and 1.35 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+Traceback (most recent call last):
+  File "/content/kaggleproject/src/backends/hf_local.py", line 117, in start
+    self._model = AutoModelForCausalLM.from_pretrained(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/models/auto/auto_factory.py", line 600, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 317, in _wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5069, in from_pretrained
+    ) = cls._load_pretrained_model(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5532, in _load_pretrained_model
+    _error_msgs, disk_offload_index, cpu_offload_index = load_shard_file(args)
+                                                         ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 975, in load_shard_file
+    disk_offload_index, cpu_offload_index = _load_state_dict_into_meta_model(
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 883, in _load_state_dict_into_meta_model
+    hf_quantizer.create_quantized_param(
+  File "/usr/local/lib/python3.12/dist-packages/transformers/quantizers/quantizer_mxfp4.py", line 247, in create_quantized_param
+    dequantize(module, param_name, param_value, target_device, dq_param_name, **shard_kwargs)
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 342, in dequantize
+    dequantized = convert_moe_packed_tensors(getattr(module, blocks_attr), getattr(module, scales_attr))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 124, in convert_moe_packed_tensors
+    idx_hi = (blk >> 4).to(torch.long)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 1.98 GiB. GPU 0 has a total capacity of 39.56 GiB of which 302.88 MiB is free. Process 315400 has 39.25 GiB memory in use. Of the allocated memory 36.90 GiB is allocated by PyTorch, and 1.87 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/content/kaggleproject/src/backends/hf_local.py", line 135, in start
+    self._model = AutoModelForCausalLM.from_pretrained(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/models/auto/auto_factory.py", line 600, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 317, in _wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5069, in from_pretrained
+    ) = cls._load_pretrained_model(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5532, in _load_pretrained_model
+    _error_msgs, disk_offload_index, cpu_offload_index = load_shard_file(args)
+                                                         ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 975, in load_shard_file
+    disk_offload_index, cpu_offload_index = _load_state_dict_into_meta_model(
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 883, in _load_state_dict_into_meta_model
+    hf_quantizer.create_quantized_param(
+  File "/usr/local/lib/python3.12/dist-packages/transformers/quantizers/quantizer_mxfp4.py", line 247, in create_quantized_param
+    dequantize(module, param_name, param_value, target_device, dq_param_name, **shard_kwargs)
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 342, in dequantize
+    dequantized = convert_moe_packed_tensors(getattr(module, blocks_attr), getattr(module, scales_attr))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 123, in convert_moe_packed_tensors
+    idx_lo = (blk & 0x0F).to(torch.long)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 1014.00 MiB. GPU 0 has a total capacity of 39.56 GiB of which 302.88 MiB is free. Process 315400 has 39.25 GiB memory in use. Of the allocated memory 37.43 GiB is allocated by PyTorch, and 1.35 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+Loading checkpoint shards:   0% 0/3 [00:00<?, ?it/s]
+
+[5/7] Testing: Tool Use Exploitation
+2025-08-19 18:47:28 | INFO | hf-local | [hf_local] Loading tokenizer: openai/gpt-oss-20b
+2025-08-19 18:47:29 | INFO | hf-local | [hf_local] Attempting preferred load: device_map='cuda', torch_dtype='auto'
+Loading checkpoint shards:  67% 2/3 [00:04<00:02,  2.09s/it]
+2025-08-19 18:47:34 | ERROR | hf-local | [hf_local] Preferred load failed, trying device_map='auto': CUDA out of memory. Tried to allocate 1.98 GiB. GPU 0 has a total capacity of 39.56 GiB of which 302.88 MiB is free. Process 315400 has 39.25 GiB memory in use. Of the allocated memory 36.90 GiB is allocated by PyTorch, and 1.87 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+Traceback (most recent call last):
+  File "/content/kaggleproject/src/backends/hf_local.py", line 117, in start
+    self._model = AutoModelForCausalLM.from_pretrained(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/models/auto/auto_factory.py", line 600, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 317, in _wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5069, in from_pretrained
+    ) = cls._load_pretrained_model(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5532, in _load_pretrained_model
+    _error_msgs, disk_offload_index, cpu_offload_index = load_shard_file(args)
+                                                         ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 975, in load_shard_file
+    disk_offload_index, cpu_offload_index = _load_state_dict_into_meta_model(
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 883, in _load_state_dict_into_meta_model
+    hf_quantizer.create_quantized_param(
+  File "/usr/local/lib/python3.12/dist-packages/transformers/quantizers/quantizer_mxfp4.py", line 247, in create_quantized_param
+    dequantize(module, param_name, param_value, target_device, dq_param_name, **shard_kwargs)
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 342, in dequantize
+    dequantized = convert_moe_packed_tensors(getattr(module, blocks_attr), getattr(module, scales_attr))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 124, in convert_moe_packed_tensors
+    idx_hi = (blk >> 4).to(torch.long)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 1.98 GiB. GPU 0 has a total capacity of 39.56 GiB of which 302.88 MiB is free. Process 315400 has 39.25 GiB memory in use. Of the allocated memory 36.90 GiB is allocated by PyTorch, and 1.87 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+Loading checkpoint shards:   0% 0/3 [00:00<?, ?it/s]
+2025-08-19 18:47:34 | ERROR | hf-local | [hf_local] device_map='auto' failed, falling back to CPU: CUDA out of memory. Tried to allocate 1014.00 MiB. GPU 0 has a total capacity of 39.56 GiB of which 302.88 MiB is free. Process 315400 has 39.25 GiB memory in use. Of the allocated memory 37.43 GiB is allocated by PyTorch, and 1.35 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+Traceback (most recent call last):
+  File "/content/kaggleproject/src/backends/hf_local.py", line 117, in start
+    self._model = AutoModelForCausalLM.from_pretrained(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/models/auto/auto_factory.py", line 600, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 317, in _wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5069, in from_pretrained
+    ) = cls._load_pretrained_model(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5532, in _load_pretrained_model
+    _error_msgs, disk_offload_index, cpu_offload_index = load_shard_file(args)
+                                                         ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 975, in load_shard_file
+    disk_offload_index, cpu_offload_index = _load_state_dict_into_meta_model(
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 883, in _load_state_dict_into_meta_model
+    hf_quantizer.create_quantized_param(
+  File "/usr/local/lib/python3.12/dist-packages/transformers/quantizers/quantizer_mxfp4.py", line 247, in create_quantized_param
+    dequantize(module, param_name, param_value, target_device, dq_param_name, **shard_kwargs)
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 342, in dequantize
+    dequantized = convert_moe_packed_tensors(getattr(module, blocks_attr), getattr(module, scales_attr))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 124, in convert_moe_packed_tensors
+    idx_hi = (blk >> 4).to(torch.long)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 1.98 GiB. GPU 0 has a total capacity of 39.56 GiB of which 302.88 MiB is free. Process 315400 has 39.25 GiB memory in use. Of the allocated memory 36.90 GiB is allocated by PyTorch, and 1.87 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/content/kaggleproject/src/backends/hf_local.py", line 135, in start
+    self._model = AutoModelForCausalLM.from_pretrained(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/models/auto/auto_factory.py", line 600, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 317, in _wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5069, in from_pretrained
+    ) = cls._load_pretrained_model(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5532, in _load_pretrained_model
+    _error_msgs, disk_offload_index, cpu_offload_index = load_shard_file(args)
+                                                         ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 975, in load_shard_file
+    disk_offload_index, cpu_offload_index = _load_state_dict_into_meta_model(
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 883, in _load_state_dict_into_meta_model
+    hf_quantizer.create_quantized_param(
+  File "/usr/local/lib/python3.12/dist-packages/transformers/quantizers/quantizer_mxfp4.py", line 247, in create_quantized_param
+    dequantize(module, param_name, param_value, target_device, dq_param_name, **shard_kwargs)
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 342, in dequantize
+    dequantized = convert_moe_packed_tensors(getattr(module, blocks_attr), getattr(module, scales_attr))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 123, in convert_moe_packed_tensors
+    idx_lo = (blk & 0x0F).to(torch.long)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 1014.00 MiB. GPU 0 has a total capacity of 39.56 GiB of which 302.88 MiB is free. Process 315400 has 39.25 GiB memory in use. Of the allocated memory 37.43 GiB is allocated by PyTorch, and 1.35 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+Loading checkpoint shards:   0% 0/3 [00:00<?, ?it/s]
+
+[6/7] Testing: Data Exfiltration via Encoding
+2025-08-19 18:47:34 | INFO | hf-local | [hf_local] Loading tokenizer: openai/gpt-oss-20b
+2025-08-19 18:47:35 | INFO | hf-local | [hf_local] Attempting preferred load: device_map='cuda', torch_dtype='auto'
+Loading checkpoint shards:  67% 2/3 [00:04<00:02,  2.07s/it]
+2025-08-19 18:47:40 | ERROR | hf-local | [hf_local] Preferred load failed, trying device_map='auto': CUDA out of memory. Tried to allocate 1.98 GiB. GPU 0 has a total capacity of 39.56 GiB of which 302.88 MiB is free. Process 315400 has 39.25 GiB memory in use. Of the allocated memory 36.90 GiB is allocated by PyTorch, and 1.87 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+Traceback (most recent call last):
+  File "/content/kaggleproject/src/backends/hf_local.py", line 117, in start
+    self._model = AutoModelForCausalLM.from_pretrained(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/models/auto/auto_factory.py", line 600, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 317, in _wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5069, in from_pretrained
+    ) = cls._load_pretrained_model(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5532, in _load_pretrained_model
+    _error_msgs, disk_offload_index, cpu_offload_index = load_shard_file(args)
+                                                         ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 975, in load_shard_file
+    disk_offload_index, cpu_offload_index = _load_state_dict_into_meta_model(
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 883, in _load_state_dict_into_meta_model
+    hf_quantizer.create_quantized_param(
+  File "/usr/local/lib/python3.12/dist-packages/transformers/quantizers/quantizer_mxfp4.py", line 247, in create_quantized_param
+    dequantize(module, param_name, param_value, target_device, dq_param_name, **shard_kwargs)
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 342, in dequantize
+    dequantized = convert_moe_packed_tensors(getattr(module, blocks_attr), getattr(module, scales_attr))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 124, in convert_moe_packed_tensors
+    idx_hi = (blk >> 4).to(torch.long)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 1.98 GiB. GPU 0 has a total capacity of 39.56 GiB of which 302.88 MiB is free. Process 315400 has 39.25 GiB memory in use. Of the allocated memory 36.90 GiB is allocated by PyTorch, and 1.87 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+Loading checkpoint shards:   0% 0/3 [00:00<?, ?it/s]
+2025-08-19 18:47:40 | ERROR | hf-local | [hf_local] device_map='auto' failed, falling back to CPU: CUDA out of memory. Tried to allocate 1014.00 MiB. GPU 0 has a total capacity of 39.56 GiB of which 302.88 MiB is free. Process 315400 has 39.25 GiB memory in use. Of the allocated memory 37.43 GiB is allocated by PyTorch, and 1.35 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+Traceback (most recent call last):
+  File "/content/kaggleproject/src/backends/hf_local.py", line 117, in start
+    self._model = AutoModelForCausalLM.from_pretrained(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/models/auto/auto_factory.py", line 600, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 317, in _wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5069, in from_pretrained
+    ) = cls._load_pretrained_model(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5532, in _load_pretrained_model
+    _error_msgs, disk_offload_index, cpu_offload_index = load_shard_file(args)
+                                                         ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 975, in load_shard_file
+    disk_offload_index, cpu_offload_index = _load_state_dict_into_meta_model(
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 883, in _load_state_dict_into_meta_model
+    hf_quantizer.create_quantized_param(
+  File "/usr/local/lib/python3.12/dist-packages/transformers/quantizers/quantizer_mxfp4.py", line 247, in create_quantized_param
+    dequantize(module, param_name, param_value, target_device, dq_param_name, **shard_kwargs)
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 342, in dequantize
+    dequantized = convert_moe_packed_tensors(getattr(module, blocks_attr), getattr(module, scales_attr))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 124, in convert_moe_packed_tensors
+    idx_hi = (blk >> 4).to(torch.long)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 1.98 GiB. GPU 0 has a total capacity of 39.56 GiB of which 302.88 MiB is free. Process 315400 has 39.25 GiB memory in use. Of the allocated memory 36.90 GiB is allocated by PyTorch, and 1.87 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/content/kaggleproject/src/backends/hf_local.py", line 135, in start
+    self._model = AutoModelForCausalLM.from_pretrained(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/models/auto/auto_factory.py", line 600, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 317, in _wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5069, in from_pretrained
+    ) = cls._load_pretrained_model(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5532, in _load_pretrained_model
+    _error_msgs, disk_offload_index, cpu_offload_index = load_shard_file(args)
+                                                         ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 975, in load_shard_file
+    disk_offload_index, cpu_offload_index = _load_state_dict_into_meta_model(
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 883, in _load_state_dict_into_meta_model
+    hf_quantizer.create_quantized_param(
+  File "/usr/local/lib/python3.12/dist-packages/transformers/quantizers/quantizer_mxfp4.py", line 247, in create_quantized_param
+    dequantize(module, param_name, param_value, target_device, dq_param_name, **shard_kwargs)
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 342, in dequantize
+    dequantized = convert_moe_packed_tensors(getattr(module, blocks_attr), getattr(module, scales_attr))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 123, in convert_moe_packed_tensors
+    idx_lo = (blk & 0x0F).to(torch.long)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 1014.00 MiB. GPU 0 has a total capacity of 39.56 GiB of which 302.88 MiB is free. Process 315400 has 39.25 GiB memory in use. Of the allocated memory 37.43 GiB is allocated by PyTorch, and 1.35 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+Loading checkpoint shards:   0% 0/3 [00:00<?, ?it/s]
+
+[7/7] Testing: Sandbagging Capability Test
+2025-08-19 18:47:40 | INFO | hf-local | [hf_local] Loading tokenizer: openai/gpt-oss-20b
+2025-08-19 18:47:41 | INFO | hf-local | [hf_local] Attempting preferred load: device_map='cuda', torch_dtype='auto'
+Loading checkpoint shards:  67% 2/3 [00:04<00:02,  2.09s/it]
+2025-08-19 18:47:46 | ERROR | hf-local | [hf_local] Preferred load failed, trying device_map='auto': CUDA out of memory. Tried to allocate 1.98 GiB. GPU 0 has a total capacity of 39.56 GiB of which 302.88 MiB is free. Process 315400 has 39.25 GiB memory in use. Of the allocated memory 36.90 GiB is allocated by PyTorch, and 1.87 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+Traceback (most recent call last):
+  File "/content/kaggleproject/src/backends/hf_local.py", line 117, in start
+    self._model = AutoModelForCausalLM.from_pretrained(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/models/auto/auto_factory.py", line 600, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 317, in _wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5069, in from_pretrained
+    ) = cls._load_pretrained_model(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5532, in _load_pretrained_model
+    _error_msgs, disk_offload_index, cpu_offload_index = load_shard_file(args)
+                                                         ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 975, in load_shard_file
+    disk_offload_index, cpu_offload_index = _load_state_dict_into_meta_model(
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 883, in _load_state_dict_into_meta_model
+    hf_quantizer.create_quantized_param(
+  File "/usr/local/lib/python3.12/dist-packages/transformers/quantizers/quantizer_mxfp4.py", line 247, in create_quantized_param
+    dequantize(module, param_name, param_value, target_device, dq_param_name, **shard_kwargs)
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 342, in dequantize
+    dequantized = convert_moe_packed_tensors(getattr(module, blocks_attr), getattr(module, scales_attr))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 124, in convert_moe_packed_tensors
+    idx_hi = (blk >> 4).to(torch.long)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 1.98 GiB. GPU 0 has a total capacity of 39.56 GiB of which 302.88 MiB is free. Process 315400 has 39.25 GiB memory in use. Of the allocated memory 36.90 GiB is allocated by PyTorch, and 1.87 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+Loading checkpoint shards:   0% 0/3 [00:00<?, ?it/s]
+2025-08-19 18:47:46 | ERROR | hf-local | [hf_local] device_map='auto' failed, falling back to CPU: CUDA out of memory. Tried to allocate 1014.00 MiB. GPU 0 has a total capacity of 39.56 GiB of which 302.88 MiB is free. Process 315400 has 39.25 GiB memory in use. Of the allocated memory 37.43 GiB is allocated by PyTorch, and 1.35 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+Traceback (most recent call last):
+  File "/content/kaggleproject/src/backends/hf_local.py", line 117, in start
+    self._model = AutoModelForCausalLM.from_pretrained(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/models/auto/auto_factory.py", line 600, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 317, in _wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5069, in from_pretrained
+    ) = cls._load_pretrained_model(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5532, in _load_pretrained_model
+    _error_msgs, disk_offload_index, cpu_offload_index = load_shard_file(args)
+                                                         ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 975, in load_shard_file
+    disk_offload_index, cpu_offload_index = _load_state_dict_into_meta_model(
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 883, in _load_state_dict_into_meta_model
+    hf_quantizer.create_quantized_param(
+  File "/usr/local/lib/python3.12/dist-packages/transformers/quantizers/quantizer_mxfp4.py", line 247, in create_quantized_param
+    dequantize(module, param_name, param_value, target_device, dq_param_name, **shard_kwargs)
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 342, in dequantize
+    dequantized = convert_moe_packed_tensors(getattr(module, blocks_attr), getattr(module, scales_attr))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 124, in convert_moe_packed_tensors
+    idx_hi = (blk >> 4).to(torch.long)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 1.98 GiB. GPU 0 has a total capacity of 39.56 GiB of which 302.88 MiB is free. Process 315400 has 39.25 GiB memory in use. Of the allocated memory 36.90 GiB is allocated by PyTorch, and 1.87 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/content/kaggleproject/src/backends/hf_local.py", line 135, in start
+    self._model = AutoModelForCausalLM.from_pretrained(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/models/auto/auto_factory.py", line 600, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 317, in _wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5069, in from_pretrained
+    ) = cls._load_pretrained_model(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 5532, in _load_pretrained_model
+    _error_msgs, disk_offload_index, cpu_offload_index = load_shard_file(args)
+                                                         ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 975, in load_shard_file
+    disk_offload_index, cpu_offload_index = _load_state_dict_into_meta_model(
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/modeling_utils.py", line 883, in _load_state_dict_into_meta_model
+    hf_quantizer.create_quantized_param(
+  File "/usr/local/lib/python3.12/dist-packages/transformers/quantizers/quantizer_mxfp4.py", line 247, in create_quantized_param
+    dequantize(module, param_name, param_value, target_device, dq_param_name, **shard_kwargs)
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 342, in dequantize
+    dequantized = convert_moe_packed_tensors(getattr(module, blocks_attr), getattr(module, scales_attr))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/dist-packages/transformers/integrations/mxfp4.py", line 123, in convert_moe_packed_tensors
+    idx_lo = (blk & 0x0F).to(torch.long)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 1014.00 MiB. GPU 0 has a total capacity of 39.56 GiB of which 302.88 MiB is free. Process 315400 has 39.25 GiB memory in use. Of the allocated memory 37.43 GiB is allocated by PyTorch, and 1.35 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+Loading checkpoint shards:   0% 0/3 [00:00<?, ?it/s]
+/content/kaggleproject/run_competition.py:232: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  "timestamp": datetime.utcnow().isoformat()
+
+🎉 Competition scan complete!
+Found 0 vulnerabilities across 0 categories
+Findings saved as findings_*.json files
+Summary saved as competition_summary.json

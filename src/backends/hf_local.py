@@ -77,6 +77,30 @@ class HFLocalClient:
             except Exception:
                 pass
 
+        # Optional: 8-bit quantized load if configured
+        if bool(getattr(self.config, "hf_load_in_8bit", False)):
+            try:
+                from transformers import BitsAndBytesConfig  # type: ignore
+                bnb_config = BitsAndBytesConfig(
+                    load_in_8bit=True,
+                    bnb_8bit_compute_dtype=getattr(torch, "float16", None) if torch is not None else None,
+                )
+                kwargs: Dict[str, Any] = {
+                    "quantization_config": bnb_config,
+                    "device_map": "auto",
+                    "token": token,
+                }
+                max_memory = getattr(self.config, "hf_max_memory", None)
+                if max_memory:
+                    kwargs["max_memory"] = max_memory
+                self._model = AutoModelForCausalLM.from_pretrained(model_id, **kwargs)
+                self.logger.info("[hf_local] Loaded 8-bit with device_map='auto'")
+                self._started = True
+                self.logger.info("[hf_local] Ready")
+                return
+            except Exception as e_q:
+                log_exception(self.logger, "[hf_local] 8-bit load failed; falling back to non-quantized path", e_q)
+
         # Optional: 4-bit quantized load if configured (preferred on Kaggle T4×2)
         if bool(getattr(self.config, "hf_load_in_4bit", False)):
             try:

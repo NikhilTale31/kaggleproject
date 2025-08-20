@@ -18,6 +18,7 @@
   "hf_top_p": 0.95,
   "hf_temperature": 0.7,
   "hf_torch_dtype": "auto",
-  "hf_device_map": "cuda",
-  "hf_reasoning_effort": "medium"
+  "hf_device_map": "auto",
+  "hf_reasoning_effort": "medium",
+  "hf_load_in_8bit": true
 }
