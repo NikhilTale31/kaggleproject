@@ -2,7 +2,8 @@ from __future__ import annotations
 
 import asyncio
 from typing import Any, Dict, Optional
-
+import gc
+import os
 import logging
 
 try:
@@ -17,6 +18,7 @@ except Exception as e:  # pragma: no cover
 
 from ..config import Config
 from ..utils.logger import get_logger, log_exception
+from ..utils.memory_manager import MemoryManager, prepare_for_model_loading
 
 
 class HFLocalClient:
@@ -66,6 +68,11 @@ class HFLocalClient:
         import os
         token = getattr(self.config, "hf_token", None) or os.getenv("HUGGINGFACE_HUB_TOKEN") or os.getenv("HF_TOKEN")
 
+        # Prepare memory before loading
+        model_size_gb = 20.0 if "20b" in model_id.lower() else 10.0
+        can_load, memory_message = prepare_for_model_loading(model_size_gb)
+        self.logger.info(f"[hf_local] Memory preparation: {memory_message}")
+
         # Load tokenizer
         self.logger.info(f"[hf_local] Loading tokenizer: {model_id}")
         self._tokenizer = AutoTokenizer.from_pretrained(model_id, token=token)
@@ -97,6 +104,39 @@ class HFLocalClient:
             except Exception as e_q:
                 log_exception(self.logger, "[hf_local] 8-bit load failed; falling back to non-quantized path", e_q)
 
+        # Optional: 8-bit quantized load if configured
+        if bool(getattr(self.config, "hf_load_in_8bit", False)):
+            try:
+                self.logger.info("[hf_local] Attempting 8-bit quantized load")
+                
+                # Clear memory before loading
+                MemoryManager.clear_memory()
+                
+                kwargs: Dict[str, Any] = {
+                    "load_in_8bit": True,
+                    "device_map": "auto",
+                    "torch_dtype": torch.float16 if torch is not None else "auto",
+                    "low_cpu_mem_usage": True,
+                    "token": token,
+                }
+                
+                # Add memory limits if specified
+                max_memory = getattr(self.config, "hf_max_memory", None)
+                if max_memory:
+                    kwargs["max_memory"] = max_memory
+                
+                self._model = AutoModelForCausalLM.from_pretrained(model_id, **kwargs)
+                self.logger.info("[hf_local] Successfully loaded in 8-bit mode")
+                self._started = True
+                
+                # Log memory after loading
+                MemoryManager.log_memory_status("After 8-bit loading")
+                return
+                
+            except Exception as e_8bit:
+                log_exception(self.logger, "[hf_local] 8-bit load failed", e_8bit)
+                MemoryManager.clear_memory()
+        
         # Optional: 4-bit quantized load if configured (preferred on Kaggle T4×2)
         if bool(getattr(self.config, "hf_load_in_4bit", False)):
             try:
@@ -118,6 +158,7 @@ class HFLocalClient:
                     "quantization_config": bnb_config,
                     "device_map": "auto",
                     "token": token,
+                    "low_cpu_mem_usage": True,
                 }
                 max_memory = getattr(self.config, "hf_max_memory", None)
                 if max_memory:
@@ -129,6 +170,7 @@ class HFLocalClient:
                 return
             except Exception as e_q:
                 log_exception(self.logger, "[hf_local] 4-bit load failed; falling back to non-quantized path", e_q)
+                MemoryManager.clear_memory()
 
         # Attempt user-requested load first (as provided in the task)
         # NOTE: This often OOMs on 4 GB GPUs; we catch and fallback automatically.

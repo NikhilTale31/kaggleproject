@@ -110,6 +110,7 @@ import shutil
 def fix_vendor_before_imports():
     """Fix vendor directory issues before importing anything else"""
     vendor_paths = [
+        "/content/kaggleproject/vendor",
         "/kaggle/working/vendor",
         "/kaggle/working/kaggleproject/vendor",
         "./vendor",
@@ -153,7 +154,7 @@ def fix_vendor_before_imports():
 fix_vendor_before_imports()
 
 # Set environment variables to help find PyTorch
-os.environ['TORCH_HOME'] = "/kaggle/working/vendor"
+os.environ['TORCH_HOME'] = "/content/kaggleproject/.cache/torch"
 os.environ['CUDA_HOME'] = '/usr/local/cuda'
 # Set PyTorch memory allocation to avoid fragmentation
 os.environ['PYTORCH_CUDA_ALLOC_CONF'] = 'expandable_segments:True'
@@ -164,11 +165,16 @@ import json
 from datetime import datetime
 from typing import List, Dict
 import argparse
+import gc
 
 # Try to import torch first to verify it's working
 try:
     import torch
     print(f"✅ PyTorch loaded successfully: {torch.__version__}")
+    # Clear any existing GPU memory right after import
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+        torch.cuda.synchronize()
 except ImportError as e:
     print(f"❌ Failed to import PyTorch: {e}")
     print(f"Current sys.path: {sys.path[:3]}")  # Show first 3 paths
@@ -178,53 +184,99 @@ from src.competition.attack_vectors import COMPETITION_ATTACK_VECTORS
 from src.core.client_factory import ClientFactory
 from src.core.vulnerability_scanner import VulnerabilityScanner
 from src.config import load_config
+from src.utils.memory_manager import MemoryManager, prepare_for_model_loading
 
 
 async def run_competition_scan():
     """Run comprehensive competition scan."""
     
+    # Prepare memory before loading model
+    print("🧹 Preparing memory for model loading...")
+    model_size_gb = 20.0  # For gpt-oss-20b
+    can_load, memory_message = prepare_for_model_loading(model_size_gb)
+    print(f"📊 Memory status: {memory_message}")
+    
     config = load_config()
+    
+    # Log initial memory status
+    MemoryManager.log_memory_status("Before creating client")
+    
     client = ClientFactory.create_client(config)
     scanner = VulnerabilityScanner(client)
     
+    # Log memory after model loading
+    MemoryManager.log_memory_status("After model loading")
+    
     findings = []
     
-    print("🎯 Starting OpenAI gpt-oss-20b Red-Teaming Challenge...")
+    print("\n🎯 Starting OpenAI gpt-oss-20b Red-Teaming Challenge...")
     print(f"Testing {len(COMPETITION_ATTACK_VECTORS)} attack scenarios...")
     
     for i, scenario in enumerate(COMPETITION_ATTACK_VECTORS, 1):
         print(f"\n[{i}/{len(COMPETITION_ATTACK_VECTORS)}] Testing: {scenario.name}")
         
-        # Run attack scenario
-        result = await scanner.test_vulnerability(
-            prompt=scenario.prompt_template,
-            category=scenario.category,
-            expected_behavior=scenario.expected_vulnerability
-        )
+        # Clear memory before each test (except first)
+        if i > 1:
+            gc.collect()
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
         
-        if result.is_vulnerable:
-            print(f"✅ Vulnerability found: {result.vulnerability_type}")
-            
-            # Create finding for competition
-            finding = FindingsFormatter.create_finding(
-                issue_title=f"{scenario.name} - {result.vulnerability_type}",
-                topic_area=scenario.category,
-                overview=result.description,
-                desired_behavior=f"Model should not exhibit {scenario.expected_vulnerability}",
-                observed_behavior=result.evidence,
-                severity=result.severity_score,
-                breadth=result.breadth_score,
-                harmony_response=result.model_response,
-                steps_to_reproduce=result.reproduction_steps,
-                notes=f"Automated discovery via {scenario.name} test"
+        try:
+            # Run attack scenario
+            result = await scanner.test_vulnerability(
+                prompt=scenario.prompt_template,
+                category=scenario.category,
+                expected_behavior=scenario.expected_vulnerability
             )
             
-            findings.append(finding)
+            if result.is_vulnerable:
+                print(f"✅ Vulnerability found: {result.vulnerability_type}")
+                
+                # Create finding for competition
+                finding = FindingsFormatter.create_finding(
+                    issue_title=f"{scenario.name} - {result.vulnerability_type}",
+                    topic_area=scenario.category,
+                    overview=result.description,
+                    desired_behavior=f"Model should not exhibit {scenario.expected_vulnerability}",
+                    observed_behavior=result.evidence,
+                    severity=result.severity_score,
+                    breadth=result.breadth_score,
+                    harmony_response=result.model_response,
+                    steps_to_reproduce=result.reproduction_steps,
+                    notes=f"Automated discovery via {scenario.name} test"
+                )
+                
+                findings.append(finding)
+                
+                # Save individual finding
+                filename = f"findings_{len(findings)}_{scenario.category}.json"
+                FindingsFormatter.save_finding(finding, filename)
+                print(f"💾 Saved finding: {filename}")
+                
+        except torch.cuda.OutOfMemoryError as e:
+            print(f"⚠️ GPU OOM during test {i}, clearing memory and retrying...")
+            MemoryManager.clear_memory()
             
-            # Save individual finding
-            filename = f"findings_{len(findings)}_{scenario.category}.json"
-            FindingsFormatter.save_finding(finding, filename)
-            print(f"💾 Saved finding: {filename}")
+            # Retry once with cleared memory and shorter prompt
+            try:
+                result = await scanner.test_vulnerability(
+                    prompt=scenario.prompt_template[:500],  # Shorter prompt
+                    category=scenario.category,
+                    expected_behavior=scenario.expected_vulnerability
+                )
+                if result.is_vulnerable:
+                    print(f"✅ Vulnerability found on retry: {result.vulnerability_type}")
+            except Exception as retry_error:
+                print(f"❌ Test {i} failed after retry: {retry_error}")
+                continue
+                
+        except Exception as e:
+            print(f"❌ Error in test {i}: {e}")
+            continue
+        
+        # Log memory status periodically
+        if i % 3 == 0:
+            MemoryManager.log_memory_status(f"After test {i}")
     
     # Generate summary report
     summary = {
@@ -238,9 +290,12 @@ async def run_competition_scan():
         json.dump(summary, f, indent=2)
     
     print(f"\n🎉 Competition scan complete!")
-    print(f"Found {len(findings)} vulnerabilities across {len(set(f['issue_summary']['topic_area'] for f in findings))} categories")
+    print(f"Found {len(findings)} vulnerabilities across {len(set(f['issue_summary']['topic_area'] for f in findings)) if findings else 0} categories")
     print(f"Findings saved as findings_*.json files")
     print(f"Summary saved as competition_summary.json")
+    
+    # Final memory status
+    MemoryManager.log_memory_status("Final")
 
 
 if __name__ == "__main__":
