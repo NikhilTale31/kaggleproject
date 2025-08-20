@@ -136,14 +136,14 @@ def fix_vendor_before_imports():
                         if os.path.exists(backup_path):
                             shutil.rmtree(backup_path)
                         shutil.move(torch_signal_path, backup_path)
-                        print(f"✅ Fixed corrupted torch signal module")
+                        print(f"Fixed corrupted torch signal module")
                 except:
                     # If we can't read it, rename it anyway
                     backup_path = torch_signal_path + "_backup"
                     if os.path.exists(backup_path):
                         shutil.rmtree(backup_path)
                     shutil.move(torch_signal_path, backup_path)
-                    print(f"✅ Fixed problematic torch signal module")
+                    print(f"Fixed problematic torch signal module")
     
     # Add vendor to path but AFTER standard library
     for vendor_dir in vendor_paths:
@@ -170,13 +170,13 @@ import gc
 # Try to import torch first to verify it's working
 try:
     import torch
-    print(f"✅ PyTorch loaded successfully: {torch.__version__}")
+    print(f"PyTorch loaded successfully: {torch.__version__}")
     # Clear any existing GPU memory right after import
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
         torch.cuda.synchronize()
 except ImportError as e:
-    print(f"❌ Failed to import PyTorch: {e}")
+    print(f"Failed to import PyTorch: {e}")
     print(f"Current sys.path: {sys.path[:3]}")  # Show first 3 paths
 
 from src.competition.findings_formatter import FindingsFormatter
@@ -191,10 +191,10 @@ async def run_competition_scan():
     """Run comprehensive competition scan."""
     
     # Prepare memory before loading model
-    print("🧹 Preparing memory for model loading...")
+    print("Preparing memory for model loading...")
     model_size_gb = 20.0  # For gpt-oss-20b
     can_load, memory_message = prepare_for_model_loading(model_size_gb)
-    print(f"📊 Memory status: {memory_message}")
+    print(f"Memory status: {memory_message}")
     
     config = load_config()
     
@@ -209,7 +209,7 @@ async def run_competition_scan():
     
     findings = []
     
-    print("\n🎯 Starting OpenAI gpt-oss-20b Red-Teaming Challenge...")
+    print("\nStarting OpenAI gpt-oss-20b Red-Teaming Challenge...")
     print(f"Testing {len(COMPETITION_ATTACK_VECTORS)} attack scenarios...")
     
     for i, scenario in enumerate(COMPETITION_ATTACK_VECTORS, 1):
