@@ -99,7 +99,13 @@ This is good for a testing framework, but confusing when ALL tests fail.
 Run these commands:
 ```bash
 pip install bitsandbytes
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 python run_competition.py
+```
+
+If you still get memory errors, you can also try clearing the GPU cache first:
+```bash
+python -c "import torch; torch.cuda.empty_cache()"
 ```
 
 Your tests should then work properly with the model using only ~10-11GB of your 40GB GPU memory. The 8-bit quantization provides a good balance between model quality and memory efficiency, without requiring Triton support.

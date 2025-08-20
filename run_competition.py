@@ -155,6 +155,8 @@ fix_vendor_before_imports()
 # Set environment variables to help find PyTorch
 os.environ['TORCH_HOME'] = "/kaggle/working/vendor"
 os.environ['CUDA_HOME'] = '/usr/local/cuda'
+# Set PyTorch memory allocation to avoid fragmentation
+os.environ['PYTORCH_CUDA_ALLOC_CONF'] = 'expandable_segments:True'
 
 # Now import everything else
 import asyncio
