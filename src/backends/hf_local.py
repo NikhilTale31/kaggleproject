@@ -80,15 +80,11 @@ class HFLocalClient:
         # Optional: 8-bit quantized load if configured
         if bool(getattr(self.config, "hf_load_in_8bit", False)):
             try:
-                from transformers import BitsAndBytesConfig  # type: ignore
-                bnb_config = BitsAndBytesConfig(
-                    load_in_8bit=True,
-                    bnb_8bit_compute_dtype=getattr(torch, "float16", None) if torch is not None else None,
-                )
                 kwargs: Dict[str, Any] = {
-                    "quantization_config": bnb_config,
+                    "load_in_8bit": True,
                     "device_map": "auto",
                     "token": token,
+                    "torch_dtype": torch.float16 if torch is not None else None,
                 }
                 max_memory = getattr(self.config, "hf_max_memory", None)
                 if max_memory:
